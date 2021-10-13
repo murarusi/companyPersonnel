@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Claudiu Murarusi - Company-Personnel</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <meta name="author" content="Claudiu Murarusi">
+
+    <link rel="stylesheet" href="vendors/node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="vendors/node_modules/@fortawesome/fontawesome-free/css/all.css">
+    <link rel="stylesheet" href="vendors/node_modules/w3-css/w3.css">
+    <link rel="stylesheet" href="vendors/node_modules/jquery-confirm/dist/jquery-confirm.min.css">
+    <link rel="stylesheet" href="libs/css/style.css">
+
+</head>
+<body>
+<div id="preloader"></div>
+<div class="nav  row ">
+    <div class="d-flex">
+        <button class="col-sm-auto btn align-self-center" id="add-person">
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"
+                 stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="16"></line>
+                <line x1="8" y1="12" x2="16" y2="12"></line>
+            </svg>
+        </button>
+        <div class="col-sm-auto align-self-center ">
+            <div class="dropdown">
+                <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-filter" width="24"
+                         height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M5.5 5h13a1 1 0 0 1 .5 1.5l-5 5.5l0 7l-4 -3l0 -4l-5 -5.5a1 1 0 0 1 .5 -1.5"></path>
+                    </svg>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <div id="department-filter-dropdown">
+                        <h6 class="dropdown-header">Filter personnel by department</h6>
+                        <div class="form-floating">
+                            <select id="department-filter" class="department-select form-select">
+                            </select>
+                            <label for="add-department-select">Department</label>
+                        </div>
+                    </div>
+                    <h6 class="dropdown-header">Filter personnel by location</h6>
+                    <div class="form-floating">
+                        <select id="location-filter" class="location-select form-select">
+                            <option value=0 selected>None</option>
+                        </select>
+                        <label for="add-department-select">Location</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-auto align-self-center ">
+            <div class="dropdown">
+                <button class="btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-dots-vertical"
+                         width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <circle cx="12" cy="12" r="1"></circle>
+                        <circle cx="12" cy="19" r="1"></circle>
+                        <circle cx="12" cy="5" r="1"></circle>
+                    </svg>
+                </button>
+                <div class="dropdown-content">
+                    <h6 class="dropdown-header">Add, edit or delete location</h6>
+                    <a href="#" id="locations-link">Locations</a>
+                    <h6 class="dropdown-header">Add, edit or delete department</h6>
+                    <a href="#" id="departments-link">Departments</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-6"></div>
+    </div>
+    <div class="p-12">
+        <input id="search" type="text" class="searchTerm rounded-pill" placeholder="Start typing to Search ">
+    </div>
+</div>
+<div class="body-container ">
+    <div class="personnel-container col">
+        <ul class="personnel " id="personnel-list">
+        </ul>
+    </div>
+    <div class="department-container col-sm-6">
+        <ul class="departments" id="departments-list">
+        </ul>
+    </div>
+</div>
+
+<!-- Modal add person -->
+<div class=" modal fade" id="add-person-modal" tabindex="-1" role="dialog" aria-labelledby="add-person-modal"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalScrollableTitle">Add Employee</h5>
+                <div type="button" class="far fa-times-circle" data-bs-dismiss="modal" aria-label="Close">
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-floating">
+                    <input class="form-control" type="text" minlength="3" maxlength="10"
+                           name="firstName" id="add-person-firstName" required>
+                    <label for="add-person-firstName">First Name</label>
+                </div>
+                <div class="form-floating">
+                    <input class="form-control" type="text" minlength="3" maxlength="10"
+                           name="lastName" id="add-person-lastName" required>
+                    <label for="add-person-lastName">Last Name</label></div>
+                <div class="form-floating">
+                    <input class="form-control" type="text" required minlength="3"
+                           name="jobTitle" id="add-person-jobTitle">
+                    <label for="add-person-jobTitle">Job Title</label></div>
+                <div class="form-floating">
+                    <input type="email" name="email" id="add-person-email" class="form-control" required>
+                    <label for="add-person-email">Email</label>
+                </div>
+                <div class="form-floating">
+                    <select class="department-select form-select" name="addPersonDepartmentName"
+                            id="add-person-departmentID" aria-label="Select department">
+                    </select>
+                    <label for="add-person-departmentID">Select department</label>
+                </div>
+                <button type="button" class="btn btn-outline-success" id="add-employee-save-btn">ADD employee</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal edit person -->
+<div class=" modal fade" id="edit-person-modal" tabindex="-1" role="dialog" aria-labelledby="edit-person-modal"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="edit-person-modal-title">Edit Employee</h5>
+                <div type="button" class="far fa-times-circle" data-bs-dismiss="modal" aria-label="Close">
+                </div>
+            </div>
+            <div class="modal-body">
+                <input type="text" disabled class="d-none" id="edit-person-id">
+                <div class="form-floating">
+                    <input class="form-control" type="text" minlength="3" maxlength="10"
+                           name="firstName" id="edit-person-firstName" required>
+                    <label for="edit-person-firstName">First Name</label>
+                </div>
+                <div class="form-floating">
+                    <input class="form-control" type="text" minlength="3" maxlength="10"
+                           name="lastName" id="edit-person-lastName" required>
+                    <label for="edit-person-lastName">Last Name</label></div>
+                <div class="form-floating">
+                    <input class="form-control" type="text" required minlength="3"
+                           name="jobTitle" id="edit-person-jobTitle">
+                    <label for="edit-person-jobTitle">Job Title</label></div>
+                <div class="form-floating">
+                    <input type="email" name="email" id="edit-person-email" class="form-control" required>
+                    <label for="edit-person-email">Email</label>
+                </div>
+                <div class="form-floating">
+                    <select class="department-select form-select" name="departmentID"
+                            id="edit-person-departmentID" aria-label="Select department">
+                    </select>
+                    <label for="edit-person-departmentID">Select department</label>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-outline-success" id="edit-person">Save changes</button>
+                    <button type="button" class="btn btn-outline-warning" id="delete-person">Delete employee
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--location modal-->
+<div class=" modal fade" id="location-modal" tabindex="-1" role="dialog" aria-labelledby="location-modal"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add, edit or delete location</h5>
+                <div type="button" class="far fa-times-circle" data-bs-dismiss="modal" aria-label="Close">
+                </div>
+            </div>
+            <div class="modal-body">
+                <h2>Add new Location :</h2>
+                <div class="form-floating">
+                    <input class="form-control" type="text" name="name" id="add-location-name" minlength="3"
+                           required>
+                    <label for="add-location-name">New location name</label>
+                </div>
+                <button class="btn btn-outline-success" type="button" id="add-location-save-btn">Add</button>
+                <h2>Delete location: </h2>
+                <div class="form-floating">
+                    <select class="location-select form-select" id="delete-location-id" name="id">
+                    </select>
+                    <label for="delete-location-id">Select a location</label>
+                </div>
+                <div>
+                    <button class="btn btn-outline-warning" type="button" id="edit-location-btn">Edit</button>
+                    <button class="btn btn-outline-warning" type="button" id="delete-location-btn">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--department modal-->
+<div class=" modal fade" id="department-modal" tabindex="-1" role="dialog" aria-labelledby="department-modal"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add, edit or delete department</h5>
+                <div type="button" class="far fa-times-circle" data-bs-dismiss="modal" aria-label="Close">
+                </div>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <h2>Add new Department :</h2>
+                    <div class="form-floating">
+                        <input class="form-control" id="add-department-name" type="text" minlength="3" name="name"
+                               required>
+                        <label for="add-department-name">New department name</label>
+                    </div>
+                    <div class="form-floating">
+                        <select name="location" id="add-department-locationID"
+                                class="location-select form-select"></select>
+                        <label for="add-department-locationID">New department location</label>
+                    </div>
+                    <button class="btn btn-outline-success" type="button" id="add-department-save-btn">Add</button>
+                </div>
+                <div>
+                    <h2>Delete department: </h2>
+                    <div class="form-floating">
+                        <select id="delete-department-id" name="id"
+                                class="department-select form-select"></select>
+                        <label for="delete-department-id">Select a department</label>
+                    </div>
+                    <div>
+                        <button class="btn btn-outline-warning" type="button" id="edit-department-btn">Edit</button>
+                        <button class="btn btn-outline-warning" type="button" id="delete-department-btn">Delete</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--edit department modal-->
+<div class=" modal fade" id="edit-department-modal" tabindex="-1" role="dialog" aria-labelledby="edit-department-modal"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit department</h5>
+                <div type="button" class="far fa-times-circle" data-bs-dismiss="modal" aria-label="Close">
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-floating">
+                    <input class="form-control" id="edit-department-name" type="text" minlength="3" name="name" value=""
+                           required>
+                    <label for="add-department-name">Department name</label>
+                </div>
+                <div class="form-floating">
+                    <select name="location" id="edit-department-select"
+                            class="location-select form-select"></select>
+                    <label for="edit-department-select">Department location</label>
+                </div>
+                <button class="btn btn-outline-success" type="submit" id="edit-department-save-btn">Save</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--edit location modal-->
+<div class=" modal fade" id="edit-location-modal" tabindex="-1" role="dialog" aria-labelledby="edit-location-modal"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit location</h5>
+                <div type="button" class="far fa-times-circle" data-bs-dismiss="modal" aria-label="Close">
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-floating">
+                    <input class="form-control" id="edit-location-name" type="text" minlength="3" name="name" value=""
+                           required>
+                    <label for="add-location-name">Location name</label>
+                </div>
+                <button class="btn btn-outline-success" type="submit" id="edit-location-save-btn">Save</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="vendors/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+<script src="vendors/node_modules/jquery/dist/jquery.js"></script>
+<script src="vendors/node_modules/jquery-confirm/dist/jquery-confirm.min.js"></script>
+<script type="module" src="libs/js/functions.js"></script>
+<script type="module" src="libs/js/script.js"></script>
+</body>
+</html>
